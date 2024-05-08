@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  frontend:
+    build: ./frontend  
+    container_name: frontend_container
+    ports:
+      - "80:80"         
+    networks:
+      - app_network
+
+  nodeapp:
+    build: ./Backend  
+    container_name: nodeapp_container
+    ports:
+      - "5000:5000"     
+    networks:
+      - app_network
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: rajdb   
+      MYSQL_USER: admin   
+      MYSQL_PASSWORD: 12345678  
+    ports:
+      - "3306:3306" 
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
